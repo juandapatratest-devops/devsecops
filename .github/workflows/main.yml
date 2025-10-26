@@ -51,28 +51,28 @@ jobs:
   # 3. SCA (pip-audit)
   # -------------------------
   sca:
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
-    - name: Install dependencies
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pip-audit
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pip-audit
 
-    - name: Run pip-audit
-      run: |
-        source venv/bin/activate
-        pip-audit -r requirements.txt
+      - name: Run pip-audit
+        run: |
+          source venv/bin/activate
+          pip-audit -r requirements.txt
 
   # -------------------------
   # 4. Secret Scan (Gitleaks)
@@ -122,7 +122,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build_and_push]
     steps:
-      - name: Install Trivy
+      - name: Scan Docker Image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/notes-app:latest
